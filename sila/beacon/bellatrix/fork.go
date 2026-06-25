@@ -111,7 +111,7 @@ func UpgradeToBellatrix(spec *common.Spec, epc *common.EpochsContext, pre *altai
 	if err != nil {
 		return nil, err
 	}
-	latestExecutionPayloadHeader := ExecutionPayloadHeaderType.Default(nil)
+	latestSilaExecutionPayloadHeader := SilaExecutionPayloadHeaderType.Default(nil)
 
 	return AsBeaconStateView(BeaconStateType(spec).FromFields(
 		(*view.Uint64View)(&genesisTime),
@@ -138,6 +138,6 @@ func UpgradeToBellatrix(spec *common.Spec, epc *common.EpochsContext, pre *altai
 		inactivityScores,
 		currentSyncCommitteeView,
 		nextSyncCommitteeView,
-		latestExecutionPayloadHeader,
+		latestSilaExecutionPayloadHeader,
 	))
 }

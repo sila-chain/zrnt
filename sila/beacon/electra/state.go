@@ -48,7 +48,7 @@ type BeaconState struct {
 	CurrentSyncCommittee common.SyncCommittee `json:"current_sync_committee" yaml:"current_sync_committee"`
 	NextSyncCommittee    common.SyncCommittee `json:"next_sync_committee" yaml:"next_sync_committee"`
 	// Execution-layer  (modified in EIP-4844)
-	LatestExecutionPayloadHeader deneb.ExecutionPayloadHeader `json:"latest_execution_payload_header" yaml:"latest_execution_payload_header"`
+	LatestSilaExecutionPayloadHeader deneb.SilaExecutionPayloadHeader `json:"latest_execution_payload_header" yaml:"latest_execution_payload_header"`
 	// Withdrawals
 	NextWithdrawalIndex          common.WithdrawalIndex `json:"next_withdrawal_index" yaml:"next_withdrawal_index"`
 	NextWithdrawalValidatorIndex common.ValidatorIndex  `json:"next_withdrawal_validator_index" yaml:"next_withdrawal_validator_index"`
@@ -87,7 +87,7 @@ func (v *BeaconState) Deserialize(spec *common.Spec, dr *codec.DecodingReader) e
 		&v.FinalizedCheckpoint,
 		spec.Wrap(&v.InactivityScores),
 		spec.Wrap(&v.CurrentSyncCommittee), spec.Wrap(&v.NextSyncCommittee),
-		&v.LatestExecutionPayloadHeader,
+		&v.LatestSilaExecutionPayloadHeader,
 		&v.NextWithdrawalIndex, &v.NextWithdrawalValidatorIndex,
 		spec.Wrap(&v.HistoricalSummaries),
 		&v.DepositRequestsStartIndex, &v.DepositBalanceToConsume,
@@ -112,7 +112,7 @@ func (v *BeaconState) Serialize(spec *common.Spec, w *codec.EncodingWriter) erro
 		&v.FinalizedCheckpoint,
 		spec.Wrap(&v.InactivityScores),
 		spec.Wrap(&v.CurrentSyncCommittee), spec.Wrap(&v.NextSyncCommittee),
-		&v.LatestExecutionPayloadHeader,
+		&v.LatestSilaExecutionPayloadHeader,
 		&v.NextWithdrawalIndex, &v.NextWithdrawalValidatorIndex,
 		spec.Wrap(&v.HistoricalSummaries),
 		&v.DepositRequestsStartIndex, &v.DepositBalanceToConsume,
@@ -137,7 +137,7 @@ func (v *BeaconState) ByteLength(spec *common.Spec) uint64 {
 		&v.FinalizedCheckpoint,
 		spec.Wrap(&v.InactivityScores),
 		spec.Wrap(&v.CurrentSyncCommittee), spec.Wrap(&v.NextSyncCommittee),
-		&v.LatestExecutionPayloadHeader,
+		&v.LatestSilaExecutionPayloadHeader,
 		&v.NextWithdrawalIndex, &v.NextWithdrawalValidatorIndex,
 		spec.Wrap(&v.HistoricalSummaries),
 		&v.DepositRequestsStartIndex, &v.DepositBalanceToConsume,
@@ -166,7 +166,7 @@ func (v *BeaconState) HashTreeRoot(spec *common.Spec, hFn tree.HashFn) common.Ro
 		&v.FinalizedCheckpoint,
 		spec.Wrap(&v.InactivityScores),
 		spec.Wrap(&v.CurrentSyncCommittee), spec.Wrap(&v.NextSyncCommittee),
-		&v.LatestExecutionPayloadHeader,
+		&v.LatestSilaExecutionPayloadHeader,
 		&v.NextWithdrawalIndex, &v.NextWithdrawalValidatorIndex,
 		spec.Wrap(&v.HistoricalSummaries),
 		&v.DepositRequestsStartIndex, &v.DepositBalanceToConsume,
@@ -205,7 +205,7 @@ const (
 	_inactivityScores
 	_currentSyncCommittee
 	_nextSyncCommittee
-	_latestExecutionPayloadHeader
+	_latestSilaExecutionPayloadHeader
 	_nextWithdrawalIndex
 	_nextWithdrawalValidatorIndex
 	_historicalSummaries
@@ -257,7 +257,7 @@ func BeaconStateType(spec *common.Spec) *ContainerTypeDef {
 		{"current_sync_committee", common.SyncCommitteeType(spec)},
 		{"next_sync_committee", common.SyncCommitteeType(spec)},
 		// Execution-layer
-		{"latest_execution_payload_header", deneb.ExecutionPayloadHeaderType},
+		{"latest_execution_payload_header", deneb.SilaExecutionPayloadHeaderType},
 		// Withdrawals
 		{"next_withdrawal_index", common.WithdrawalIndexType},
 		{"next_withdrawal_validator_index", common.ValidatorIndexType},
@@ -572,12 +572,12 @@ func (state *BeaconStateView) RotateSyncCommittee(next *common.SyncCommitteeView
 	return state.Set(_nextSyncCommittee, next)
 }
 
-func (state *BeaconStateView) LatestExecutionPayloadHeader() (*deneb.ExecutionPayloadHeaderView, error) {
-	return deneb.AsExecutionPayloadHeader(state.Get(_latestExecutionPayloadHeader))
+func (state *BeaconStateView) LatestSilaExecutionPayloadHeader() (*deneb.SilaExecutionPayloadHeaderView, error) {
+	return deneb.AsSilaExecutionPayloadHeader(state.Get(_latestSilaExecutionPayloadHeader))
 }
 
-func (state *BeaconStateView) SetLatestExecutionPayloadHeader(h *deneb.ExecutionPayloadHeader) error {
-	return state.Set(_latestExecutionPayloadHeader, h.View())
+func (state *BeaconStateView) SetLatestSilaExecutionPayloadHeader(h *deneb.SilaExecutionPayloadHeader) error {
+	return state.Set(_latestSilaExecutionPayloadHeader, h.View())
 }
 
 func (state *BeaconStateView) NextWithdrawalIndex() (common.WithdrawalIndex, error) {
@@ -702,6 +702,6 @@ func (state *BeaconStateView) CopyState() (common.BeaconState, error) {
 type ExecutionTrackingBeaconState interface {
 	common.BeaconState
 
-	LatestExecutionPayloadHeader() (*deneb.ExecutionPayloadHeaderView, error)
-	SetLatestExecutionPayloadHeader(h *deneb.ExecutionPayloadHeader) error
+	LatestSilaExecutionPayloadHeader() (*deneb.SilaExecutionPayloadHeaderView, error)
+	SetLatestSilaExecutionPayloadHeader(h *deneb.SilaExecutionPayloadHeader) error
 }

@@ -46,7 +46,7 @@ type BeaconState struct {
 	CurrentSyncCommittee common.SyncCommittee `json:"current_sync_committee" yaml:"current_sync_committee"`
 	NextSyncCommittee    common.SyncCommittee `json:"next_sync_committee" yaml:"next_sync_committee"`
 	// Execution-layer
-	LatestExecutionPayloadHeader ExecutionPayloadHeader `json:"latest_execution_payload_header" yaml:"latest_execution_payload_header"`
+	LatestSilaExecutionPayloadHeader SilaExecutionPayloadHeader `json:"latest_execution_payload_header" yaml:"latest_execution_payload_header"`
 }
 
 func (v *BeaconState) Deserialize(spec *common.Spec, dr *codec.DecodingReader) error {
@@ -62,7 +62,7 @@ func (v *BeaconState) Deserialize(spec *common.Spec, dr *codec.DecodingReader) e
 		&v.FinalizedCheckpoint,
 		spec.Wrap(&v.InactivityScores),
 		spec.Wrap(&v.CurrentSyncCommittee), spec.Wrap(&v.NextSyncCommittee),
-		&v.LatestExecutionPayloadHeader)
+		&v.LatestSilaExecutionPayloadHeader)
 }
 
 func (v *BeaconState) Serialize(spec *common.Spec, w *codec.EncodingWriter) error {
@@ -78,7 +78,7 @@ func (v *BeaconState) Serialize(spec *common.Spec, w *codec.EncodingWriter) erro
 		&v.FinalizedCheckpoint,
 		spec.Wrap(&v.InactivityScores),
 		spec.Wrap(&v.CurrentSyncCommittee), spec.Wrap(&v.NextSyncCommittee),
-		&v.LatestExecutionPayloadHeader)
+		&v.LatestSilaExecutionPayloadHeader)
 }
 
 func (v *BeaconState) ByteLength(spec *common.Spec) uint64 {
@@ -94,7 +94,7 @@ func (v *BeaconState) ByteLength(spec *common.Spec) uint64 {
 		&v.FinalizedCheckpoint,
 		spec.Wrap(&v.InactivityScores),
 		spec.Wrap(&v.CurrentSyncCommittee), spec.Wrap(&v.NextSyncCommittee),
-		&v.LatestExecutionPayloadHeader)
+		&v.LatestSilaExecutionPayloadHeader)
 }
 
 func (*BeaconState) FixedLength(*common.Spec) uint64 {
@@ -114,7 +114,7 @@ func (v *BeaconState) HashTreeRoot(spec *common.Spec, hFn tree.HashFn) common.Ro
 		&v.FinalizedCheckpoint,
 		spec.Wrap(&v.InactivityScores),
 		spec.Wrap(&v.CurrentSyncCommittee), spec.Wrap(&v.NextSyncCommittee),
-		&v.LatestExecutionPayloadHeader)
+		&v.LatestSilaExecutionPayloadHeader)
 }
 
 // Hack to make state fields consistent and verifiable without using many hardcoded indices
@@ -144,7 +144,7 @@ const (
 	_inactivityScores
 	_currentSyncCommittee
 	_nextSyncCommittee
-	_latestExecutionPayloadHeader
+	_latestSilaExecutionPayloadHeader
 )
 
 func BeaconStateType(spec *common.Spec) *ContainerTypeDef {
@@ -184,7 +184,7 @@ func BeaconStateType(spec *common.Spec) *ContainerTypeDef {
 		{"current_sync_committee", common.SyncCommitteeType(spec)},
 		{"next_sync_committee", common.SyncCommitteeType(spec)},
 		// Execution-layer
-		{"latest_execution_payload_header", ExecutionPayloadHeaderType},
+		{"latest_execution_payload_header", SilaExecutionPayloadHeaderType},
 	})
 }
 
@@ -485,12 +485,12 @@ func (state *BeaconStateView) RotateSyncCommittee(next *common.SyncCommitteeView
 	return state.Set(_nextSyncCommittee, next)
 }
 
-func (state *BeaconStateView) LatestExecutionPayloadHeader() (*ExecutionPayloadHeaderView, error) {
-	return AsExecutionPayloadHeader(state.Get(_latestExecutionPayloadHeader))
+func (state *BeaconStateView) LatestSilaExecutionPayloadHeader() (*SilaExecutionPayloadHeaderView, error) {
+	return AsSilaExecutionPayloadHeader(state.Get(_latestSilaExecutionPayloadHeader))
 }
 
-func (state *BeaconStateView) SetLatestExecutionPayloadHeader(h *ExecutionPayloadHeader) error {
-	return state.Set(_latestExecutionPayloadHeader, h.View())
+func (state *BeaconStateView) SetLatestSilaExecutionPayloadHeader(h *SilaExecutionPayloadHeader) error {
+	return state.Set(_latestSilaExecutionPayloadHeader, h.View())
 }
 
 func (state *BeaconStateView) ForkSettings(spec *common.Spec) *common.ForkSettings {

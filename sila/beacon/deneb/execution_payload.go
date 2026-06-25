@@ -8,21 +8,21 @@ import (
 	"github.com/sila-chain/zrnt/sila/beacon/common"
 )
 
-func ProcessExecutionPayload(ctx context.Context, spec *common.Spec, state ExecutionTrackingBeaconState, body *BeaconBlockBody, engine ExecutionEngine) error {
+func ProcessSilaExecutionPayload(ctx context.Context, spec *common.Spec, state ExecutionTrackingBeaconState, body *BeaconBlockBody, engine ExecutionEngine) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
 	if engine == nil {
 		return errors.New("nil execution engine")
 	}
-	payload := &body.ExecutionPayload
+	payload := &body.SilaExecutionPayload
 
 	slot, err := state.Slot()
 	if err != nil {
 		return err
 	}
 
-	latestExecHeader, err := state.LatestExecutionPayloadHeader()
+	latestExecHeader, err := state.LatestSilaExecutionPayloadHeader()
 	if err != nil {
 		return err
 	}
@@ -77,8 +77,8 @@ func ProcessExecutionPayload(ctx context.Context, spec *common.Spec, state Execu
 	if err != nil {
 		return fmt.Errorf("failed to get current in-progresss latest beacon-block-header from beacon state: %w", err)
 	}
-	if valid, err := VerifyAndNotifyNewPayload(ctx, engine, &NewPayloadRequest{
-		ExecutionPayload:      payload,
+	if valid, err := VerifyAndNotifySilaNewPayload(ctx, engine, &SilaNewPayloadRequest{
+		SilaExecutionPayload:  payload,
 		VersionedHashes:       versionedHashes,
 		ParentBeaconBlockRoot: latestHeader.ParentRoot,
 	}); err != nil {
@@ -89,5 +89,5 @@ func ProcessExecutionPayload(ctx context.Context, spec *common.Spec, state Execu
 			payload.BlockHash, payload.BlockNumber)
 	}
 
-	return state.SetLatestExecutionPayloadHeader(payload.Header(spec))
+	return state.SetLatestSilaExecutionPayloadHeader(payload.Header(spec))
 }

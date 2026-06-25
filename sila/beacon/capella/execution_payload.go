@@ -8,7 +8,7 @@ import (
 	"github.com/sila-chain/zrnt/sila/beacon/common"
 )
 
-func ProcessExecutionPayload(ctx context.Context, spec *common.Spec, state ExecutionTrackingBeaconState, executionPayload *ExecutionPayload, engine ExecutionEngine) error {
+func ProcessSilaExecutionPayload(ctx context.Context, spec *common.Spec, state ExecutionTrackingBeaconState, executionPayload *SilaExecutionPayload, engine ExecutionEngine) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
@@ -21,7 +21,7 @@ func ProcessExecutionPayload(ctx context.Context, spec *common.Spec, state Execu
 		return err
 	}
 
-	latestExecHeader, err := state.LatestExecutionPayloadHeader()
+	latestExecHeader, err := state.LatestSilaExecutionPayloadHeader()
 	if err != nil {
 		return err
 	}
@@ -59,7 +59,7 @@ func ProcessExecutionPayload(ctx context.Context, spec *common.Spec, state Execu
 			slot, genesisTime, expectedTime, executionPayload.Timestamp)
 	}
 
-	if valid, err := VerifyAndNotifyNewPayload(ctx, engine, &NewPayloadRequest{ExecutionPayload: executionPayload}); err != nil {
+	if valid, err := VerifyAndNotifySilaNewPayload(ctx, engine, &SilaNewPayloadRequest{SilaExecutionPayload: executionPayload}); err != nil {
 		return fmt.Errorf("unexpected problem in execution engine when inserting block %s (height %d), err: %v",
 			executionPayload.BlockHash, executionPayload.BlockNumber, err)
 	} else if !valid {
@@ -67,5 +67,5 @@ func ProcessExecutionPayload(ctx context.Context, spec *common.Spec, state Execu
 			executionPayload.BlockHash, executionPayload.BlockNumber)
 	}
 
-	return state.SetLatestExecutionPayloadHeader(executionPayload.Header(spec))
+	return state.SetLatestSilaExecutionPayloadHeader(executionPayload.Header(spec))
 }

@@ -97,7 +97,7 @@ func (state *BeaconStateView) ProcessBlock(ctx context.Context, spec *common.Spe
 		if !ok {
 			return fmt.Errorf("provided execution-engine interface does not support Bellatrix: %T", spec.ExecutionEngine)
 		}
-		if err := ProcessExecutionPayload(ctx, spec, state, &body.ExecutionPayload, eng); err != nil {
+		if err := ProcessSilaExecutionPayload(ctx, spec, state, &body.SilaExecutionPayload, eng); err != nil {
 			return err
 		}
 	}
@@ -143,8 +143,8 @@ type ExecutionUpgradeBeaconState interface {
 type ExecutionTrackingBeaconState interface {
 	common.BeaconState
 
-	LatestExecutionPayloadHeader() (*ExecutionPayloadHeaderView, error)
-	SetLatestExecutionPayloadHeader(h *ExecutionPayloadHeader) error
+	LatestSilaExecutionPayloadHeader() (*SilaExecutionPayloadHeaderView, error)
+	SetLatestSilaExecutionPayloadHeader(h *SilaExecutionPayloadHeader) error
 }
 
 func (state *BeaconStateView) IsExecutionEnabled(spec *common.Spec, block *BeaconBlock) (bool, error) {
@@ -159,11 +159,11 @@ func (state *BeaconStateView) IsExecutionEnabled(spec *common.Spec, block *Beaco
 }
 
 func (state *BeaconStateView) IsTransitionCompleted() (bool, error) {
-	execHeader, err := state.LatestExecutionPayloadHeader()
+	execHeader, err := state.LatestSilaExecutionPayloadHeader()
 	if err != nil {
 		return false, err
 	}
-	empty := ExecutionPayloadHeaderType.DefaultNode().MerkleRoot(tree.GetHashFn())
+	empty := SilaExecutionPayloadHeaderType.DefaultNode().MerkleRoot(tree.GetHashFn())
 	return execHeader.HashTreeRoot(tree.GetHashFn()) != empty, nil
 }
 
@@ -175,6 +175,6 @@ func (state *BeaconStateView) IsTransitionBlock(spec *common.Spec, block *Beacon
 	if isTransitionCompleted {
 		return false, nil
 	}
-	empty := ExecutionPayloadType(spec).DefaultNode().MerkleRoot(tree.GetHashFn())
-	return block.Body.ExecutionPayload.HashTreeRoot(spec, tree.GetHashFn()) != empty, nil
+	empty := SilaExecutionPayloadType(spec).DefaultNode().MerkleRoot(tree.GetHashFn())
+	return block.Body.SilaExecutionPayload.HashTreeRoot(spec, tree.GetHashFn()) != empty, nil
 }

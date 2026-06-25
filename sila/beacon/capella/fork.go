@@ -111,15 +111,15 @@ func UpgradeToCapella(spec *common.Spec, epc *common.EpochsContext, pre *bellatr
 	if err != nil {
 		return nil, err
 	}
-	latestExecutionPayloadHeader, err := pre.LatestExecutionPayloadHeader()
+	latestSilaExecutionPayloadHeader, err := pre.LatestSilaExecutionPayloadHeader()
 	if err != nil {
 		return nil, err
 	}
-	oldExecutionHeader, err := latestExecutionPayloadHeader.Raw()
+	oldExecutionHeader, err := latestSilaExecutionPayloadHeader.Raw()
 	if err != nil {
 		return nil, err
 	}
-	updatedExecutionPayloadHeader := &ExecutionPayloadHeader{
+	updatedSilaExecutionPayloadHeader := &SilaExecutionPayloadHeader{
 		ParentHash:       oldExecutionHeader.ParentHash,
 		FeeRecipient:     oldExecutionHeader.FeeRecipient,
 		StateRoot:        oldExecutionHeader.StateRoot,
@@ -164,7 +164,7 @@ func UpgradeToCapella(spec *common.Spec, epc *common.EpochsContext, pre *bellatr
 		inactivityScores,
 		currentSyncCommitteeView,
 		nextSyncCommitteeView,
-		updatedExecutionPayloadHeader.View(),
+		updatedSilaExecutionPayloadHeader.View(),
 		nextWithdrawalIndex,
 		nextWithdrawalValidatorIndex,
 		HistoricalSummariesType(spec).Default(nil),

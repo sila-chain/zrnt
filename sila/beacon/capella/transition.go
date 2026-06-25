@@ -84,7 +84,7 @@ func (state *BeaconStateView) ProcessBlock(ctx context.Context, spec *common.Spe
 		return err
 	}
 	// [Modified in Capella] Removed `is_execution_enabled` check in Capella
-	if err := ProcessWithdrawals(ctx, spec, state, &body.ExecutionPayload); err != nil {
+	if err := ProcessWithdrawals(ctx, spec, state, &body.SilaExecutionPayload); err != nil {
 		return err
 	}
 	// Modified in Capella
@@ -92,7 +92,7 @@ func (state *BeaconStateView) ProcessBlock(ctx context.Context, spec *common.Spe
 	if !ok {
 		return fmt.Errorf("provided execution-engine interface does not support Capella: %T", spec.ExecutionEngine)
 	}
-	if err := ProcessExecutionPayload(ctx, spec, state, &body.ExecutionPayload, eng); err != nil {
+	if err := ProcessSilaExecutionPayload(ctx, spec, state, &body.SilaExecutionPayload, eng); err != nil {
 		return err
 	}
 	if err := phase0.ProcessRandaoReveal(ctx, spec, epc, state, body.RandaoReveal); err != nil {
@@ -241,11 +241,11 @@ func GetExpectedWithdrawals(state BeaconStateWithWithdrawals, spec *common.Spec)
 	return withdrawals, nil
 }
 
-type ExecutionPayloadWithWithdrawals interface {
+type SilaExecutionPayloadWithWithdrawals interface {
 	GetWitdrawals() []common.Withdrawal
 }
 
-func ProcessWithdrawals(ctx context.Context, spec *common.Spec, state BeaconStateWithWithdrawals, executionPayload ExecutionPayloadWithWithdrawals) error {
+func ProcessWithdrawals(ctx context.Context, spec *common.Spec, state BeaconStateWithWithdrawals, executionPayload SilaExecutionPayloadWithWithdrawals) error {
 	expectedWithdrawals, err := GetExpectedWithdrawals(state, spec)
 	if err != nil {
 		return err

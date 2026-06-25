@@ -125,7 +125,7 @@ type BeaconBlockBody struct {
 
 	SyncAggregate altair.SyncAggregate `json:"sync_aggregate" yaml:"sync_aggregate"`
 
-	ExecutionPayload ExecutionPayload `json:"execution_payload" yaml:"execution_payload"`
+	SilaExecutionPayload SilaExecutionPayload `json:"execution_payload" yaml:"execution_payload"`
 }
 
 func (b *BeaconBlockBody) Deserialize(spec *common.Spec, dr *codec.DecodingReader) error {
@@ -134,7 +134,7 @@ func (b *BeaconBlockBody) Deserialize(spec *common.Spec, dr *codec.DecodingReade
 		&b.Graffiti, spec.Wrap(&b.ProposerSlashings),
 		spec.Wrap(&b.AttesterSlashings), spec.Wrap(&b.Attestations),
 		spec.Wrap(&b.Deposits), spec.Wrap(&b.VoluntaryExits),
-		spec.Wrap(&b.SyncAggregate), spec.Wrap(&b.ExecutionPayload),
+		spec.Wrap(&b.SyncAggregate), spec.Wrap(&b.SilaExecutionPayload),
 	)
 }
 
@@ -144,7 +144,7 @@ func (b *BeaconBlockBody) Serialize(spec *common.Spec, w *codec.EncodingWriter) 
 		&b.Graffiti, spec.Wrap(&b.ProposerSlashings),
 		spec.Wrap(&b.AttesterSlashings), spec.Wrap(&b.Attestations),
 		spec.Wrap(&b.Deposits), spec.Wrap(&b.VoluntaryExits),
-		spec.Wrap(&b.SyncAggregate), spec.Wrap(&b.ExecutionPayload),
+		spec.Wrap(&b.SyncAggregate), spec.Wrap(&b.SilaExecutionPayload),
 	)
 }
 
@@ -154,7 +154,7 @@ func (b *BeaconBlockBody) ByteLength(spec *common.Spec) uint64 {
 		&b.Graffiti, spec.Wrap(&b.ProposerSlashings),
 		spec.Wrap(&b.AttesterSlashings), spec.Wrap(&b.Attestations),
 		spec.Wrap(&b.Deposits), spec.Wrap(&b.VoluntaryExits),
-		spec.Wrap(&b.SyncAggregate), spec.Wrap(&b.ExecutionPayload),
+		spec.Wrap(&b.SyncAggregate), spec.Wrap(&b.SilaExecutionPayload),
 	)
 }
 
@@ -168,7 +168,7 @@ func (b *BeaconBlockBody) HashTreeRoot(spec *common.Spec, hFn tree.HashFn) commo
 		b.Graffiti, spec.Wrap(&b.ProposerSlashings),
 		spec.Wrap(&b.AttesterSlashings), spec.Wrap(&b.Attestations),
 		spec.Wrap(&b.Deposits), spec.Wrap(&b.VoluntaryExits),
-		spec.Wrap(&b.SyncAggregate), spec.Wrap(&b.ExecutionPayload),
+		spec.Wrap(&b.SyncAggregate), spec.Wrap(&b.SilaExecutionPayload),
 	)
 }
 
@@ -189,7 +189,7 @@ func (b *BeaconBlockBody) CheckLimits(spec *common.Spec) error {
 		return fmt.Errorf("too many voluntary exits: %d", x)
 	}
 	// TODO: also check sum of byte size, sanity check block size.
-	if x := uint64(len(b.ExecutionPayload.Transactions)); x > uint64(spec.MAX_TRANSACTIONS_PER_PAYLOAD) {
+	if x := uint64(len(b.SilaExecutionPayload.Transactions)); x > uint64(spec.MAX_TRANSACTIONS_PER_PAYLOAD) {
 		return fmt.Errorf("too many transactions: %d", x)
 	}
 	return nil
@@ -197,16 +197,16 @@ func (b *BeaconBlockBody) CheckLimits(spec *common.Spec) error {
 
 func (b *BeaconBlockBody) Shallow(spec *common.Spec) *BeaconBlockBodyShallow {
 	return &BeaconBlockBodyShallow{
-		RandaoReveal:         b.RandaoReveal,
-		Eth1Data:             b.Eth1Data,
-		Graffiti:             b.Graffiti,
-		ProposerSlashings:    b.ProposerSlashings,
-		AttesterSlashings:    b.AttesterSlashings,
-		Attestations:         b.Attestations,
-		Deposits:             b.Deposits,
-		VoluntaryExits:       b.VoluntaryExits,
-		SyncAggregate:        b.SyncAggregate,
-		ExecutionPayloadRoot: b.ExecutionPayload.HashTreeRoot(spec, tree.GetHashFn()),
+		RandaoReveal:             b.RandaoReveal,
+		Eth1Data:                 b.Eth1Data,
+		Graffiti:                 b.Graffiti,
+		ProposerSlashings:        b.ProposerSlashings,
+		AttesterSlashings:        b.AttesterSlashings,
+		Attestations:             b.Attestations,
+		Deposits:                 b.Deposits,
+		VoluntaryExits:           b.VoluntaryExits,
+		SyncAggregate:            b.SyncAggregate,
+		SilaExecutionPayloadRoot: b.SilaExecutionPayload.HashTreeRoot(spec, tree.GetHashFn()),
 	}
 }
 
@@ -223,7 +223,7 @@ func BeaconBlockBodyType(spec *common.Spec) *ContainerTypeDef {
 		{"voluntary_exits", phase0.BlockVoluntaryExitsType(spec)},
 		{"sync_aggregate", altair.SyncAggregateType(spec)},
 		// Bellatrix
-		{"execution_payload", ExecutionPayloadType(spec)},
+		{"execution_payload", SilaExecutionPayloadType(spec)},
 	})
 }
 
@@ -240,7 +240,7 @@ type BeaconBlockBodyShallow struct {
 
 	SyncAggregate altair.SyncAggregate `json:"sync_aggregate" yaml:"sync_aggregate"`
 
-	ExecutionPayloadRoot common.Root `json:"execution_payload_root" yaml:"execution_payload_root"`
+	SilaExecutionPayloadRoot common.Root `json:"execution_payload_root" yaml:"execution_payload_root"`
 }
 
 func (b *BeaconBlockBodyShallow) Deserialize(spec *common.Spec, dr *codec.DecodingReader) error {
@@ -249,7 +249,7 @@ func (b *BeaconBlockBodyShallow) Deserialize(spec *common.Spec, dr *codec.Decodi
 		&b.Graffiti, spec.Wrap(&b.ProposerSlashings),
 		spec.Wrap(&b.AttesterSlashings), spec.Wrap(&b.Attestations),
 		spec.Wrap(&b.Deposits), spec.Wrap(&b.VoluntaryExits),
-		spec.Wrap(&b.SyncAggregate), &b.ExecutionPayloadRoot,
+		spec.Wrap(&b.SyncAggregate), &b.SilaExecutionPayloadRoot,
 	)
 }
 
@@ -259,7 +259,7 @@ func (b *BeaconBlockBodyShallow) Serialize(spec *common.Spec, w *codec.EncodingW
 		&b.Graffiti, spec.Wrap(&b.ProposerSlashings),
 		spec.Wrap(&b.AttesterSlashings), spec.Wrap(&b.Attestations),
 		spec.Wrap(&b.Deposits), spec.Wrap(&b.VoluntaryExits),
-		spec.Wrap(&b.SyncAggregate), &b.ExecutionPayloadRoot,
+		spec.Wrap(&b.SyncAggregate), &b.SilaExecutionPayloadRoot,
 	)
 }
 
@@ -269,7 +269,7 @@ func (b *BeaconBlockBodyShallow) ByteLength(spec *common.Spec) uint64 {
 		&b.Graffiti, spec.Wrap(&b.ProposerSlashings),
 		spec.Wrap(&b.AttesterSlashings), spec.Wrap(&b.Attestations),
 		spec.Wrap(&b.Deposits), spec.Wrap(&b.VoluntaryExits),
-		spec.Wrap(&b.SyncAggregate), &b.ExecutionPayloadRoot,
+		spec.Wrap(&b.SyncAggregate), &b.SilaExecutionPayloadRoot,
 	)
 }
 
@@ -283,25 +283,25 @@ func (b *BeaconBlockBodyShallow) HashTreeRoot(spec *common.Spec, hFn tree.HashFn
 		b.Graffiti, spec.Wrap(&b.ProposerSlashings),
 		spec.Wrap(&b.AttesterSlashings), spec.Wrap(&b.Attestations),
 		spec.Wrap(&b.Deposits), spec.Wrap(&b.VoluntaryExits),
-		spec.Wrap(&b.SyncAggregate), &b.ExecutionPayloadRoot,
+		spec.Wrap(&b.SyncAggregate), &b.SilaExecutionPayloadRoot,
 	)
 }
 
-func (b *BeaconBlockBodyShallow) WithExecutionPayload(spec *common.Spec, payload ExecutionPayload) (*BeaconBlockBody, error) {
+func (b *BeaconBlockBodyShallow) WithSilaExecutionPayload(spec *common.Spec, payload SilaExecutionPayload) (*BeaconBlockBody, error) {
 	payloadRoot := payload.HashTreeRoot(spec, tree.GetHashFn())
-	if b.ExecutionPayloadRoot != payloadRoot {
-		return nil, fmt.Errorf("payload does not match expected root: %s <> %s", b.ExecutionPayloadRoot, payloadRoot)
+	if b.SilaExecutionPayloadRoot != payloadRoot {
+		return nil, fmt.Errorf("payload does not match expected root: %s <> %s", b.SilaExecutionPayloadRoot, payloadRoot)
 	}
 	return &BeaconBlockBody{
-		RandaoReveal:      b.RandaoReveal,
-		Eth1Data:          b.Eth1Data,
-		Graffiti:          b.Graffiti,
-		ProposerSlashings: b.ProposerSlashings,
-		AttesterSlashings: b.AttesterSlashings,
-		Attestations:      b.Attestations,
-		Deposits:          b.Deposits,
-		VoluntaryExits:    b.VoluntaryExits,
-		SyncAggregate:     b.SyncAggregate,
-		ExecutionPayload:  payload,
+		RandaoReveal:         b.RandaoReveal,
+		Eth1Data:             b.Eth1Data,
+		Graffiti:             b.Graffiti,
+		ProposerSlashings:    b.ProposerSlashings,
+		AttesterSlashings:    b.AttesterSlashings,
+		Attestations:         b.Attestations,
+		Deposits:             b.Deposits,
+		VoluntaryExits:       b.VoluntaryExits,
+		SyncAggregate:        b.SyncAggregate,
+		SilaExecutionPayload: payload,
 	}, nil
 }

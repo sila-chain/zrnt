@@ -29,7 +29,7 @@ const (
 	__end
 )
 
-var ExecutionPayloadHeaderType = ContainerType("ExecutionPayloadHeader", []FieldDef{
+var SilaExecutionPayloadHeaderType = ContainerType("SilaExecutionPayloadHeader", []FieldDef{
 	{"parent_hash", common.Hash32Type},
 	{"fee_recipient", common.Eth1AddressType},
 	{"state_root", common.Bytes32Type},
@@ -46,11 +46,11 @@ var ExecutionPayloadHeaderType = ContainerType("ExecutionPayloadHeader", []Field
 	{"transactions_root", RootType},
 })
 
-type ExecutionPayloadHeaderView struct {
+type SilaExecutionPayloadHeaderView struct {
 	*ContainerView
 }
 
-func (v *ExecutionPayloadHeaderView) Raw() (*ExecutionPayloadHeader, error) {
+func (v *SilaExecutionPayloadHeaderView) Raw() (*SilaExecutionPayloadHeader, error) {
 	values, err := v.FieldValues()
 	if err != nil {
 		return nil, err
@@ -83,7 +83,7 @@ func (v *ExecutionPayloadHeaderView) Raw() (*ExecutionPayloadHeader, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &ExecutionPayloadHeader{
+	return &SilaExecutionPayloadHeader{
 		ParentHash:       parentHash,
 		FeeRecipient:     feeRecipient,
 		StateRoot:        stateRoot,
@@ -101,23 +101,23 @@ func (v *ExecutionPayloadHeaderView) Raw() (*ExecutionPayloadHeader, error) {
 	}, nil
 }
 
-func (v *ExecutionPayloadHeaderView) ParentHash() (common.Hash32, error) {
+func (v *SilaExecutionPayloadHeaderView) ParentHash() (common.Hash32, error) {
 	return AsRoot(v.Get(__parentHash))
 }
 
-func (v *ExecutionPayloadHeaderView) FeeRecipient() (common.Eth1Address, error) {
+func (v *SilaExecutionPayloadHeaderView) FeeRecipient() (common.Eth1Address, error) {
 	return common.AsEth1Address(v.Get(__feeRecipient))
 }
 
-func (v *ExecutionPayloadHeaderView) StateRoot() (common.Bytes32, error) {
+func (v *SilaExecutionPayloadHeaderView) StateRoot() (common.Bytes32, error) {
 	return AsRoot(v.Get(__stateRoot))
 }
 
-func (v *ExecutionPayloadHeaderView) ReceiptRoot() (common.Bytes32, error) {
+func (v *SilaExecutionPayloadHeaderView) ReceiptRoot() (common.Bytes32, error) {
 	return AsRoot(v.Get(__receiptsRoot))
 }
 
-func (v *ExecutionPayloadHeaderView) LogsBloom() (*common.LogsBloom, error) {
+func (v *SilaExecutionPayloadHeaderView) LogsBloom() (*common.LogsBloom, error) {
 	logV, err := common.AsLogsBloom(v.Get(__logsBloom))
 	if err != nil {
 		return nil, err
@@ -125,44 +125,44 @@ func (v *ExecutionPayloadHeaderView) LogsBloom() (*common.LogsBloom, error) {
 	return logV.Raw()
 }
 
-func (v *ExecutionPayloadHeaderView) Random() (common.Bytes32, error) {
+func (v *SilaExecutionPayloadHeaderView) Random() (common.Bytes32, error) {
 	return AsRoot(v.Get(__prevRandao))
 }
 
-func (v *ExecutionPayloadHeaderView) BlockNumber() (Uint64View, error) {
+func (v *SilaExecutionPayloadHeaderView) BlockNumber() (Uint64View, error) {
 	return AsUint64(v.Get(__blockNumber))
 }
 
-func (v *ExecutionPayloadHeaderView) GasLimit() (Uint64View, error) {
+func (v *SilaExecutionPayloadHeaderView) GasLimit() (Uint64View, error) {
 	return AsUint64(v.Get(__gasLimit))
 }
 
-func (v *ExecutionPayloadHeaderView) GasUsed() (Uint64View, error) {
+func (v *SilaExecutionPayloadHeaderView) GasUsed() (Uint64View, error) {
 	return AsUint64(v.Get(__gasUsed))
 }
 
-func (v *ExecutionPayloadHeaderView) Timestamp() (common.Timestamp, error) {
+func (v *SilaExecutionPayloadHeaderView) Timestamp() (common.Timestamp, error) {
 	return common.AsTimestamp(v.Get(__timestamp))
 }
 
-func (v *ExecutionPayloadHeaderView) BaseFeePerGas() (Uint256View, error) {
+func (v *SilaExecutionPayloadHeaderView) BaseFeePerGas() (Uint256View, error) {
 	return AsUint256(v.Get(__baseFeePerGas))
 }
 
-func (v *ExecutionPayloadHeaderView) BlockHash() (common.Hash32, error) {
+func (v *SilaExecutionPayloadHeaderView) BlockHash() (common.Hash32, error) {
 	return AsRoot(v.Get(__blockHash))
 }
 
-func (v *ExecutionPayloadHeaderView) TransactionsRoot() (common.Root, error) {
+func (v *SilaExecutionPayloadHeaderView) TransactionsRoot() (common.Root, error) {
 	return AsRoot(v.Get(__transactionsRoot))
 }
 
-func AsExecutionPayloadHeader(v View, err error) (*ExecutionPayloadHeaderView, error) {
+func AsSilaExecutionPayloadHeader(v View, err error) (*SilaExecutionPayloadHeaderView, error) {
 	c, err := AsContainer(v, err)
-	return &ExecutionPayloadHeaderView{c}, err
+	return &SilaExecutionPayloadHeaderView{c}, err
 }
 
-type ExecutionPayloadHeader struct {
+type SilaExecutionPayloadHeader struct {
 	ParentHash       common.Hash32      `json:"parent_hash" yaml:"parent_hash"`
 	FeeRecipient     common.Eth1Address `json:"fee_recipient" yaml:"fee_recipient"`
 	StateRoot        common.Bytes32     `json:"state_root" yaml:"state_root"`
@@ -179,7 +179,7 @@ type ExecutionPayloadHeader struct {
 	TransactionsRoot common.Root        `json:"transactions_root" yaml:"transactions_root"`
 }
 
-func (s *ExecutionPayloadHeader) View() *ExecutionPayloadHeaderView {
+func (s *SilaExecutionPayloadHeader) View() *SilaExecutionPayloadHeaderView {
 	ed, err := s.ExtraData.View()
 	if err != nil {
 		panic(err)
@@ -188,43 +188,43 @@ func (s *ExecutionPayloadHeader) View() *ExecutionPayloadHeaderView {
 	lb, rng, nr, gl, gu := s.LogsBloom.View(), (*RootView)(&s.PrevRandao), s.BlockNumber, s.GasLimit, s.GasUsed
 	ts, bf, bh, tr := Uint64View(s.Timestamp), &s.BaseFeePerGas, (*RootView)(&s.BlockHash), (*RootView)(&s.TransactionsRoot)
 
-	v, err := AsExecutionPayloadHeader(ExecutionPayloadHeaderType.FromFields(pr, cb, sr, rr, lb, rng, nr, gl, gu, ts, ed, bf, bh, tr))
+	v, err := AsSilaExecutionPayloadHeader(SilaExecutionPayloadHeaderType.FromFields(pr, cb, sr, rr, lb, rng, nr, gl, gu, ts, ed, bf, bh, tr))
 	if err != nil {
 		panic(err)
 	}
 	return v
 }
 
-func (s *ExecutionPayloadHeader) Deserialize(dr *codec.DecodingReader) error {
+func (s *SilaExecutionPayloadHeader) Deserialize(dr *codec.DecodingReader) error {
 	return dr.Container(&s.ParentHash, &s.FeeRecipient, &s.StateRoot,
 		&s.ReceiptsRoot, &s.LogsBloom, &s.PrevRandao, &s.BlockNumber, &s.GasLimit,
 		&s.GasUsed, &s.Timestamp, &s.ExtraData, &s.BaseFeePerGas, &s.BlockHash, &s.TransactionsRoot)
 }
 
-func (s *ExecutionPayloadHeader) Serialize(w *codec.EncodingWriter) error {
+func (s *SilaExecutionPayloadHeader) Serialize(w *codec.EncodingWriter) error {
 	return w.Container(&s.ParentHash, &s.FeeRecipient, &s.StateRoot,
 		&s.ReceiptsRoot, &s.LogsBloom, &s.PrevRandao, &s.BlockNumber, &s.GasLimit,
 		&s.GasUsed, &s.Timestamp, &s.ExtraData, &s.BaseFeePerGas, &s.BlockHash, &s.TransactionsRoot)
 }
 
-func (s *ExecutionPayloadHeader) ByteLength() uint64 {
+func (s *SilaExecutionPayloadHeader) ByteLength() uint64 {
 	return codec.ContainerLength(&s.ParentHash, &s.FeeRecipient, &s.StateRoot,
 		&s.ReceiptsRoot, &s.LogsBloom, &s.PrevRandao, &s.BlockNumber, &s.GasLimit,
 		&s.GasUsed, &s.Timestamp, &s.ExtraData, &s.BaseFeePerGas, &s.BlockHash, &s.TransactionsRoot)
 }
 
-func (b *ExecutionPayloadHeader) FixedLength() uint64 {
+func (b *SilaExecutionPayloadHeader) FixedLength() uint64 {
 	return 0
 }
 
-func (s *ExecutionPayloadHeader) HashTreeRoot(hFn tree.HashFn) common.Root {
+func (s *SilaExecutionPayloadHeader) HashTreeRoot(hFn tree.HashFn) common.Root {
 	return hFn.HashTreeRoot(&s.ParentHash, &s.FeeRecipient, &s.StateRoot,
 		&s.ReceiptsRoot, &s.LogsBloom, &s.PrevRandao, &s.BlockNumber, &s.GasLimit,
 		&s.GasUsed, &s.Timestamp, &s.ExtraData, &s.BaseFeePerGas, &s.BlockHash, &s.TransactionsRoot)
 }
 
-func ExecutionPayloadType(spec *common.Spec) *ContainerTypeDef {
-	return ContainerType("ExecutionPayload", []FieldDef{
+func SilaExecutionPayloadType(spec *common.Spec) *ContainerTypeDef {
+	return ContainerType("SilaExecutionPayload", []FieldDef{
 		{"parent_hash", common.Hash32Type},
 		{"fee_recipient", common.Eth1AddressType},
 		{"state_root", common.Bytes32Type},
@@ -242,16 +242,16 @@ func ExecutionPayloadType(spec *common.Spec) *ContainerTypeDef {
 	})
 }
 
-type ExecutionPayloadView struct {
+type SilaExecutionPayloadView struct {
 	*ContainerView
 }
 
-func AsExecutionPayload(v View, err error) (*ExecutionPayloadView, error) {
+func AsSilaExecutionPayload(v View, err error) (*SilaExecutionPayloadView, error) {
 	c, err := AsContainer(v, err)
-	return &ExecutionPayloadView{c}, err
+	return &SilaExecutionPayloadView{c}, err
 }
 
-type ExecutionPayload struct {
+type SilaExecutionPayload struct {
 	ParentHash    common.Hash32              `json:"parent_hash" yaml:"parent_hash"`
 	FeeRecipient  common.Eth1Address         `json:"fee_recipient" yaml:"fee_recipient"`
 	StateRoot     common.Bytes32             `json:"state_root" yaml:"state_root"`
@@ -268,37 +268,37 @@ type ExecutionPayload struct {
 	Transactions  common.PayloadTransactions `json:"transactions" yaml:"transactions"`
 }
 
-func (s *ExecutionPayload) Deserialize(spec *common.Spec, dr *codec.DecodingReader) error {
+func (s *SilaExecutionPayload) Deserialize(spec *common.Spec, dr *codec.DecodingReader) error {
 	return dr.Container(&s.ParentHash, &s.FeeRecipient, &s.StateRoot,
 		&s.ReceiptsRoot, &s.LogsBloom, &s.PrevRandao, &s.BlockNumber, &s.GasLimit,
 		&s.GasUsed, &s.Timestamp, &s.ExtraData, &s.BaseFeePerGas, &s.BlockHash, spec.Wrap(&s.Transactions))
 }
 
-func (s *ExecutionPayload) Serialize(spec *common.Spec, w *codec.EncodingWriter) error {
+func (s *SilaExecutionPayload) Serialize(spec *common.Spec, w *codec.EncodingWriter) error {
 	return w.Container(&s.ParentHash, &s.FeeRecipient, &s.StateRoot,
 		&s.ReceiptsRoot, &s.LogsBloom, &s.PrevRandao, &s.BlockNumber, &s.GasLimit,
 		&s.GasUsed, &s.Timestamp, &s.ExtraData, &s.BaseFeePerGas, &s.BlockHash, spec.Wrap(&s.Transactions))
 }
 
-func (s *ExecutionPayload) ByteLength(spec *common.Spec) uint64 {
+func (s *SilaExecutionPayload) ByteLength(spec *common.Spec) uint64 {
 	return codec.ContainerLength(&s.ParentHash, &s.FeeRecipient, &s.StateRoot,
 		&s.ReceiptsRoot, &s.LogsBloom, &s.PrevRandao, &s.BlockNumber, &s.GasLimit,
 		&s.GasUsed, &s.Timestamp, &s.ExtraData, &s.BaseFeePerGas, &s.BlockHash, spec.Wrap(&s.Transactions))
 }
 
-func (a *ExecutionPayload) FixedLength(*common.Spec) uint64 {
+func (a *SilaExecutionPayload) FixedLength(*common.Spec) uint64 {
 	// transactions list is not fixed length, so the whole thing is not fixed length.
 	return 0
 }
 
-func (s *ExecutionPayload) HashTreeRoot(spec *common.Spec, hFn tree.HashFn) common.Root {
+func (s *SilaExecutionPayload) HashTreeRoot(spec *common.Spec, hFn tree.HashFn) common.Root {
 	return hFn.HashTreeRoot(&s.ParentHash, &s.FeeRecipient, &s.StateRoot,
 		&s.ReceiptsRoot, &s.LogsBloom, &s.PrevRandao, &s.BlockNumber, &s.GasLimit,
 		&s.GasUsed, &s.Timestamp, &s.ExtraData, &s.BaseFeePerGas, &s.BlockHash, spec.Wrap(&s.Transactions))
 }
 
-func (ep *ExecutionPayload) Header(spec *common.Spec) *ExecutionPayloadHeader {
-	return &ExecutionPayloadHeader{
+func (ep *SilaExecutionPayload) Header(spec *common.Spec) *SilaExecutionPayloadHeader {
+	return &SilaExecutionPayloadHeader{
 		ParentHash:       ep.ParentHash,
 		FeeRecipient:     ep.FeeRecipient,
 		StateRoot:        ep.StateRoot,
@@ -316,17 +316,17 @@ func (ep *ExecutionPayload) Header(spec *common.Spec) *ExecutionPayloadHeader {
 	}
 }
 
-type NewPayloadRequest struct {
-	ExecutionPayload *ExecutionPayload
+type SilaNewPayloadRequest struct {
+	SilaExecutionPayload *SilaExecutionPayload
 }
 
 type ExecutionEngine interface {
-	BellatrixNotifyNewPayload(ctx context.Context, executionPayload *ExecutionPayload) (valid bool, err error)
-	BellatrixIsValidBlockHash(ctx context.Context, payload *ExecutionPayload) (bool, error)
+	BellatrixNotifySilaNewPayload(ctx context.Context, executionPayload *SilaExecutionPayload) (valid bool, err error)
+	BellatrixIsValidBlockHash(ctx context.Context, payload *SilaExecutionPayload) (bool, error)
 }
 
-func VerifyAndNotifyNewPayload(ctx context.Context, eng ExecutionEngine, newPayloadRequest *NewPayloadRequest) (bool, error) {
-	executionPayload := newPayloadRequest.ExecutionPayload
+func VerifyAndNotifySilaNewPayload(ctx context.Context, eng ExecutionEngine, newPayloadRequest *SilaNewPayloadRequest) (bool, error) {
+	executionPayload := newPayloadRequest.SilaExecutionPayload
 
 	if ok, err := eng.BellatrixIsValidBlockHash(ctx, executionPayload); err != nil {
 		return false, fmt.Errorf("failed to check block hash: %w", err)
@@ -334,5 +334,5 @@ func VerifyAndNotifyNewPayload(ctx context.Context, eng ExecutionEngine, newPayl
 		return false, nil
 	}
 
-	return eng.BellatrixNotifyNewPayload(ctx, executionPayload)
+	return eng.BellatrixNotifySilaNewPayload(ctx, executionPayload)
 }

@@ -111,15 +111,15 @@ func UpgradeToDeneb(spec *common.Spec, epc *common.EpochsContext, pre *capella.B
 	if err != nil {
 		return nil, err
 	}
-	latestExecutionPayloadHeader, err := pre.LatestExecutionPayloadHeader()
+	latestSilaExecutionPayloadHeader, err := pre.LatestSilaExecutionPayloadHeader()
 	if err != nil {
 		return nil, err
 	}
-	oldExecutionHeader, err := latestExecutionPayloadHeader.Raw()
+	oldExecutionHeader, err := latestSilaExecutionPayloadHeader.Raw()
 	if err != nil {
 		return nil, err
 	}
-	updatedExecutionPayloadHeader := &ExecutionPayloadHeader{
+	updatedSilaExecutionPayloadHeader := &SilaExecutionPayloadHeader{
 		ParentHash:       oldExecutionHeader.ParentHash,
 		FeeRecipient:     oldExecutionHeader.FeeRecipient,
 		StateRoot:        oldExecutionHeader.StateRoot,
@@ -176,7 +176,7 @@ func UpgradeToDeneb(spec *common.Spec, epc *common.EpochsContext, pre *capella.B
 		inactivityScores,
 		currentSyncCommitteeView,
 		nextSyncCommitteeView,
-		updatedExecutionPayloadHeader.View(),
+		updatedSilaExecutionPayloadHeader.View(),
 		(*view.Uint64View)(&nextWithdrawalIndex),
 		(*view.Uint64View)(&nextWithdrawalValidatorIndex),
 		nextHistoricalSummaries.(*capella.HistoricalSummariesView),

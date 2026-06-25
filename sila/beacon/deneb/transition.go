@@ -82,7 +82,7 @@ func (state *BeaconStateView) ProcessBlock(ctx context.Context, spec *common.Spe
 	if err := common.ProcessHeader(ctx, spec, state, &benv.BeaconBlockHeader, expectedProposer); err != nil {
 		return err
 	}
-	if err := capella.ProcessWithdrawals(ctx, spec, state, &body.ExecutionPayload); err != nil {
+	if err := capella.ProcessWithdrawals(ctx, spec, state, &body.SilaExecutionPayload); err != nil {
 		return err
 	}
 	// Modified in Deneb
@@ -90,7 +90,7 @@ func (state *BeaconStateView) ProcessBlock(ctx context.Context, spec *common.Spe
 	if !ok {
 		return fmt.Errorf("provided execution-engine interface does not support Deneb: %T", spec.ExecutionEngine)
 	}
-	if err := ProcessExecutionPayload(ctx, spec, state, body, eng); err != nil {
+	if err := ProcessSilaExecutionPayload(ctx, spec, state, body, eng); err != nil {
 		return err
 	}
 	if err := phase0.ProcessRandaoReveal(ctx, spec, epc, state, body.RandaoReveal); err != nil {
