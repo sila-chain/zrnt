@@ -2,7 +2,7 @@
 
 ## Installing
 
-To run the spec tests, you need the test-vectors provided here: https://github.com/ethereum/sila.0-spec-tests
+To run the spec tests, you need the test-vectors provided here: https://github.com/sila-chain/Sila-Consensus-Spec-Tests
 These vectors are hosted in a [Git LFS](https://git-lfs.github.com/) repository. 
 Alternatively, you can download a `.tar.gz` from the releases page.
 

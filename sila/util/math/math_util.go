@@ -41,7 +41,7 @@ var squareRootTable = map[uint64]uint64{
 	4194304: 2048,
 }
 
-func IntegerSquareRootPrysm(n uint64) uint64 {
+func IntegerSquareRootSila(n uint64) uint64 {
 	if v, ok := squareRootTable[n]; ok {
 		return v
 	}

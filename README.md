@@ -105,7 +105,7 @@ This package implements message validation for the Sila gossip topics, and requi
 To run all tests and generate test and coverage reports: `make test`
 
 The specs are tested using test-vectors shared between Eth 2.0 clients,
- found here: [`ethereum/sila.0-spec-tests`](https://github.com/ethereum/sila.0-spec-tests).
+ found here: [`sila-chain/Sila-Consensus-Spec-Tests`](https://github.com/sila-chain/Sila-Consensus-Spec-Tests).
 Instructions on the usage of these test-vectors with ZRNT can be found in the [testing readme](./tests/spec/README.md)
  (TLDR: run `make download-tests` first).
 

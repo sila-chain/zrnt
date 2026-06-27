@@ -15,9 +15,9 @@ clear-tests:
 
 download-tests:
 	mkdir -p tests/spec/sila.0-spec-tests
-	wget https://github.com/ethereum/consensus-spec-tests/releases/download/$(SPEC_VERSION)/general.tar.gz -O - | tar -xz -C tests/spec/sila.0-spec-tests
-	wget https://github.com/ethereum/consensus-spec-tests/releases/download/$(SPEC_VERSION)/minimal.tar.gz -O - | tar -xz -C tests/spec/sila.0-spec-tests
-	wget https://github.com/ethereum/consensus-spec-tests/releases/download/$(SPEC_VERSION)/mainnet.tar.gz -O - | tar -xz -C tests/spec/sila.0-spec-tests
+	wget https://github.com/sila-chain/Sila-Consensus-Spec-Tests/releases/download/$(SPEC_VERSION)/general.tar.gz -O - | tar -xz -C tests/spec/sila.0-spec-tests
+	wget https://github.com/sila-chain/Sila-Consensus-Spec-Tests/releases/download/$(SPEC_VERSION)/minimal.tar.gz -O - | tar -xz -C tests/spec/sila.0-spec-tests
+	wget https://github.com/sila-chain/Sila-Consensus-Spec-Tests/releases/download/$(SPEC_VERSION)/mainnet.tar.gz -O - | tar -xz -C tests/spec/sila.0-spec-tests
 
 test: create-test-dir
 	gotestsum --junitfile $(TEST_OUT_DIR)/junit.xml -- -tags preset_minimal \

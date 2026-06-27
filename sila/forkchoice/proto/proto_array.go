@@ -731,7 +731,7 @@ func (pr *ProtoArray) nodeLeadsToViableHead(node *ProtoNode) (bool, error) {
 
 // This is the equivalent to the `filter_block_tree` function in the sila spec:
 //
-// https://github.com/ethereum/sila.0-specs/blob/v0.11.1/specs/phase0/fork-choice.md#filter_block_tree
+// https://github.com/sila-chain/Sila-Consensus-Specs/blob/v0.11.1/specs/phase0/fork-choice.md#filter_block_tree
 //
 // Any node that has a different finalized or justified epoch should not be viable for the head.
 func (pr *ProtoArray) isNodeViableForHead(node *ProtoNode) bool {

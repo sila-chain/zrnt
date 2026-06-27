@@ -26,7 +26,7 @@ Return `p(index)` in a pseudorandom permutation `p` of `0...list_size-1` with ``
     See the 'generalized domain' algorithm on page 3.
 
 Eth 2.0 spec implementation here:
-	https://github.com/ethereum/sila.0-specs/blob/dev/specs/core/0_beacon-chain.md#get_permuted_index
+	https://github.com/sila-chain/Sila-Consensus-Specs/blob/dev/specs/core/0_beacon-chain.md#get_permuted_index
 */
 
 // PermuteIndex shuffles an individual list item without allocating a complete list.
@@ -136,7 +136,7 @@ def shuffle(list_size, seed):
 Heavily-optimized version of the set-shuffling algorithm proposed by Vitalik to shuffle all items in a list together.
 
 Original here:
-	https://github.com/ethereum/sila.0-specs/pull/576#issue-250741806
+	https://github.com/sila-chain/Sila-Consensus-Specs/pull/576#issue-250741806
 
 Main differences, implemented by @protolambda:
     - User can supply input slice to shuffle, simple provide [0,1,2,3,4, ...] to get a list of cleanly shuffled indices.
