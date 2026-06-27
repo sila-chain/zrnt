@@ -293,7 +293,7 @@ type BeaconBlockBodyShallow struct {
 
 	BLSToExecutionChanges common.SignedBLSToExecutionChanges `json:"bls_to_execution_changes" yaml:"bls_to_execution_changes"`
 
-	BlobKZGCommitments deneb.KZGCommitments `json:"blob_kzg_commitments" yaml:"blob_kzg_commitments"` // new in EIP-4844
+	BlobKZGCommitments deneb.KZGCommitments `json:"blob_kzg_commitments" yaml:"blob_kzg_commitments"` // new in SIP-4844
 	// [New in Electra]
 	ExecutionRequests ExecutionRequests `json:"execution_requests" yaml:"execution_requests"`
 }

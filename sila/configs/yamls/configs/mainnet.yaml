@@ -106,7 +106,7 @@ REORG_MAX_EPOCHS_SINCE_FINALIZATION: 2
 
 # Deposit contract
 # ---------------------------------------------------------------
-# Ethereum PoW Mainnet
+# Sila upstream-compatible PoW mainnet reference
 DEPOSIT_CHAIN_ID: 1
 DEPOSIT_NETWORK_ID: 1
 DEPOSIT_CONTRACT_ADDRESS: 0x00000000219ab540356cBB839Cbe05303d7705Fa

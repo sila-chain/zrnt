@@ -106,7 +106,7 @@ REORG_MAX_EPOCHS_SINCE_FINALIZATION: 2
 
 # Deposit contract
 # ---------------------------------------------------------------
-# Ethereum Goerli testnet
+# Sila upstream-compatible Goerli testnet reference
 DEPOSIT_CHAIN_ID: 5
 DEPOSIT_NETWORK_ID: 5
 # Configured on a per testnet basis

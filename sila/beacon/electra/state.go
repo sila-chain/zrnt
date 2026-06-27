@@ -47,7 +47,7 @@ type BeaconState struct {
 	// Light client sync committees
 	CurrentSyncCommittee common.SyncCommittee `json:"current_sync_committee" yaml:"current_sync_committee"`
 	NextSyncCommittee    common.SyncCommittee `json:"next_sync_committee" yaml:"next_sync_committee"`
-	// Execution-layer  (modified in EIP-4844)
+	// Execution-layer  (modified in SIP-4844)
 	LatestSilaExecutionPayloadHeader deneb.SilaExecutionPayloadHeader `json:"latest_execution_payload_header" yaml:"latest_execution_payload_header"`
 	// Withdrawals
 	NextWithdrawalIndex          common.WithdrawalIndex `json:"next_withdrawal_index" yaml:"next_withdrawal_index"`

@@ -125,11 +125,11 @@ type BeaconBlockBody struct {
 
 	SyncAggregate altair.SyncAggregate `json:"sync_aggregate" yaml:"sync_aggregate"`
 
-	SilaExecutionPayload SilaExecutionPayload `json:"execution_payload" yaml:"execution_payload"` // modified in EIP-4844
+	SilaExecutionPayload SilaExecutionPayload `json:"execution_payload" yaml:"execution_payload"` // modified in SIP-4844
 
 	BLSToExecutionChanges common.SignedBLSToExecutionChanges `json:"bls_to_execution_changes" yaml:"bls_to_execution_changes"`
 
-	BlobKZGCommitments KZGCommitments `json:"blob_kzg_commitments" yaml:"blob_kzg_commitments"` // new in EIP-4844
+	BlobKZGCommitments KZGCommitments `json:"blob_kzg_commitments" yaml:"blob_kzg_commitments"` // new in SIP-4844
 }
 
 func (b *BeaconBlockBody) Deserialize(spec *common.Spec, dr *codec.DecodingReader) error {
@@ -275,7 +275,7 @@ type BeaconBlockBodyShallow struct {
 
 	BLSToExecutionChanges common.SignedBLSToExecutionChanges `json:"bls_to_execution_changes" yaml:"bls_to_execution_changes"`
 
-	BlobKZGCommitments KZGCommitments `json:"blob_kzg_commitments" yaml:"blob_kzg_commitments"` // new in EIP-4844
+	BlobKZGCommitments KZGCommitments `json:"blob_kzg_commitments" yaml:"blob_kzg_commitments"` // new in SIP-4844
 }
 
 func (b *BeaconBlockBodyShallow) Deserialize(spec *common.Spec, dr *codec.DecodingReader) error {
